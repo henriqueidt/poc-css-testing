@@ -11,4 +11,5 @@ The intent of this repository is to test and compare different approaches for te
 
 ### Cypress Image Snapshot
 
-- Very outdated (last update was in 2021)
+- Original lib (https://github.com/jaredpalmer/cypress-image-snapshot) very outdated (last update was in 2021)
+- Fork from original lib being mantained (https://github.com/simonsmith/cypress-image-snapshot)
