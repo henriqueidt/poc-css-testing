@@ -1,12 +1,15 @@
 import React from "react";
 import UserForm from "./UserForm";
+import { sizes } from "../../utils/test-utils.js";
 
 describe("<UserForm />", () => {
-  it("renders", () => {
-    cy.viewport(1024, 768);
+  sizes.forEach((size) => {
+    it(`renders on ${size}`, () => {
+      cy.viewport(size);
 
-    cy.mount(<UserForm />);
+      cy.mount(<UserForm />);
 
-    cy.matchImageSnapshot("user-form");
+      cy.matchImageSnapshot(`user-form-${size}`);
+    });
   });
 });

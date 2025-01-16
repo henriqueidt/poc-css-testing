@@ -13,3 +13,7 @@ The intent of this repository is to test and compare different approaches for te
 
 - Original lib (https://github.com/jaredpalmer/cypress-image-snapshot) very outdated (last update was in 2021)
 - Fork from original lib being mantained (https://github.com/simonsmith/cypress-image-snapshot)
+
+_PROS:_
+
+- Cypress comes up with several presets, which can be used to test across different viewports: https://docs.cypress.io/api/commands/viewport#Arguments

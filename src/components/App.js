@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import UserForm from "./UserForm/UserForm";
+import UserForm from "./UserForm/UserForm.js";
 
 export default class App extends React.Component {
   render() {

@@ -1,7 +1,9 @@
-import { defineConfig } from "cypress";
-import { addMatchImageSnapshotPlugin } from "@simonsmith/cypress-image-snapshot/plugin.js";
+const { defineConfig } = require("cypress");
+const {
+  addMatchImageSnapshotPlugin,
+} = require("@simonsmith/cypress-image-snapshot/plugin.js");
 
-export default defineConfig({
+module.exports = defineConfig({
   component: {
     devServer: {
       framework: "create-react-app",
