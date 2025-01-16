@@ -15,3 +15,9 @@
 .button:hover {
   background-color: #45a049;
 }
+
+@media (max-width: 600px) {
+  .button {
+    padding: 10px 20px;
+  }
+}
