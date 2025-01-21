@@ -44,7 +44,48 @@ describe("<UserForm />", () => {
 
 ![User Form iPhone X Diff](cypress/snapshots/src/components/UserForm/UserForm.cy.js/__diff_output__/user-form-iphone-x.diff.png)
 
-### Jest Image Snapshot
+### BackstopJS
 
-- https://github.com/americanexpress/jest-image-snapshot
-- Mentioned in https://github.com/jest-community/awesome-jest
+- Support for multiple viewports in config file
+- URL centric
+- Centralized in config file
+- Several easy to use setup options for each scenario
+
+```javascript
+  "viewports": [
+    {
+      "label": "phone",
+      "width": 320,
+      "height": 480
+    },
+    {
+      "label": "tablet",
+      "width": 1024,
+      "height": 768
+    }
+  ],
+
+    "scenarios": [
+    {
+      "label": "BackstopJS Homepage",
+      "cookiePath": "backstop_data/engine_scripts/cookies.json",
+      "url": "http://localhost:3000/",
+      "referenceUrl": "",
+      "readyEvent": "",
+      "readySelector": "",
+      "delay": 0,
+      "hideSelectors": [],
+      "removeSelectors": [],
+      "hoverSelector": "",
+      "clickSelector": "",
+      "postInteractionWait": 0,
+      "selectors": [],
+      "selectorExpansion": true,
+      "expect": 0,
+      "misMatchThreshold": 0.1,
+      "requireSameDimensions": true
+    }
+  ],
+```
+
+![iPhone  Diff](images/backstopJS-report.png)

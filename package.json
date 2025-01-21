@@ -4,8 +4,9 @@
   "description": "The intent of this repository is to test and compare different approaches for testing UI, CSS and styles in general.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "test-backstop": "backstop test",
+    "test-cypress": "cypress run"
   },
   "author": "",
   "license": "ISC",
