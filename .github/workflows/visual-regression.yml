@@ -1,0 +1,59 @@
+name: Visual Regression Testing
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  visual-regression:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest Visual Regression Tests
+        run: npm test-jest
+
+      - name: Find Diff Images
+        id: check_diff
+        run: |
+          DIFF_FILES=$(find src/components -type f -path "*/__image_snapshots__/__diff_output__/*" | xargs)
+          if [ -n "$DIFF_FILES" ]; then
+            echo "DIFF_FOUND=true" >> $GITHUB_ENV
+            echo "$DIFF_FILES" >> diff_files.txt
+          else
+            echo "DIFF_FOUND=false" >> $GITHUB_ENV
+          fi
+
+      - name: Upload Diff Images
+        if: env.DIFF_FOUND == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff-images
+          path: |
+            src/components/**/__image_snapshots__/__diff_output__/*
+
+      - name: Comment on PR with Diff Images
+        if: env.DIFF_FOUND == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COMMENT="### ⚠️ Visual Regression Changes Detected!\n\n"
+          COMMENT+="Here are the detected differences:\n\n"
+
+          while read -r line; do
+            FILENAME=$(basename "$line")
+            COMMENT+="![${FILENAME}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${FILENAME})\n\n"
+          done < diff_files.txt
+
+          gh pr comment ${{ github.event.pull_request.number }} --body "$COMMENT"
