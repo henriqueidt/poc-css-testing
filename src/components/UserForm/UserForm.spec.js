@@ -1,13 +1,29 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { generateImage } from "jsdom-screenshot";
+import userEvent from "@testing-library/user-event";
 import UserForm from "./UserForm";
 
 jest.setTimeout(10000);
 
-test("renders component and matches image snapshot", async () => {
+test("assertion for component default UI", async () => {
+  const user = userEvent.setup();
   render(<UserForm />);
-  const screenshot = await generateImage();
 
+  expect(screen.getByText("First Name:")).toBeInTheDocument();
+
+  const screenshot = await generateImage();
+  expect(screenshot).toMatchImageSnapshot();
+});
+
+test("can also test for component layout after its state has changed", async () => {
+  const user = userEvent.setup();
+  render(<UserForm />);
+
+  await user.type(screen.getByLabelText("First Name:"), "John");
+
+  expect(screen.getByLabelText("First Name:")).toHaveValue("John");
+
+  const screenshot = await generateImage();
   expect(screenshot).toMatchImageSnapshot();
 });

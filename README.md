@@ -89,3 +89,10 @@ describe("<UserForm />", () => {
 ```
 
 ![iPhone  Diff](images/backstopJS-report.png)
+
+### JEST + jsdom-screenshot
+
+- Able to add screenshot verification among existing jest tests
+- Able to test different component states not only with different props, but after using userEvents to modify it!
+
+![Diff after userEvent](src/components/UserForm/__image_snapshots__/__diff_output__/user-form-spec-js-renders-component-and-matches-image-snapshot-1-snap-diff.png)
