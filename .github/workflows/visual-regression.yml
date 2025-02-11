@@ -63,7 +63,8 @@ jobs:
 
           while read -r line; do
             FILENAME=$(basename "$line")
-            COMMENT+="![${FILENAME}](https://raw.githubusercontent.com/${{ github.repository }}/visual-diffs/main/visual-diffs/${FILENAME})\n\n"
+            COMMENT+="![${FILENAME}](https://raw.githubusercontent.com/${{ github.repository }}/refs/heads/visual-diffs/visual-diffs/${FILENAME})\n\n"
+
           done < diff_files.txt
 
           gh pr comment ${{ github.event.pull_request.number }} --body "$COMMENT"
