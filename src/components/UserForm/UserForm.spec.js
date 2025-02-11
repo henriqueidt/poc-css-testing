@@ -1,10 +1,14 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { generateImage } from "jsdom-screenshot";
 import userEvent from "@testing-library/user-event";
 import UserForm from "./UserForm";
 
 jest.setTimeout(10000);
+
+afterEach(() => {
+  cleanup();
+});
 
 test("assertion for component default UI", async () => {
   const user = userEvent.setup();
