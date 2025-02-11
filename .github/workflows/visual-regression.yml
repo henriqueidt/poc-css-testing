@@ -1,0 +1,69 @@
+name: Visual Regression Testing
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  visual-regression:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest Visual Regression Tests
+        run: npm run test-jest
+        continue-on-error: true
+
+      - name: Find Diff Images
+        id: check_diff
+        run: |
+          DIFF_FILES=$(find src/components -type f -path "*/__image_snapshots__/__diff_output__/*" | xargs)
+          if [ -n "$DIFF_FILES" ]; then
+            echo "DIFF_FOUND=true" >> $GITHUB_ENV
+            echo "$DIFF_FILES" >> diff_files.txt
+          else
+            echo "DIFF_FOUND=false" >> $GITHUB_ENV
+          fi
+
+      - name: Setup Git user
+        if: env.DIFF_FOUND == 'true'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Push Diff Images to `visual-diffs` Branch
+        if: env.DIFF_FOUND == 'true'
+        run: |
+          git fetch origin visual-diffs || git checkout --orphan visual-diffs
+          git checkout visual-diffs || git checkout -b visual-diffs
+          mkdir -p visual-diffs
+          cp -r src/components/**/__image_snapshots__/__diff_output__/* visual-diffs/
+          git add visual-diffs
+          git commit -m "Update visual diff images"
+          git push origin visual-diffs --force
+
+      - name: Comment on PR with Diff Image Previews
+        if: env.DIFF_FOUND == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          COMMENT="### ⚠️ Visual Regression Changes Detected!\n\n"
+          COMMENT+="📸 **Visual differences detected!** View them below:\n\n"
+
+          while read -r line; do
+            FILENAME=$(basename "$line")
+            COMMENT+="![${FILENAME}](https://raw.githubusercontent.com/${{ github.repository }}/visual-diffs/main/visual-diffs/${FILENAME})\n\n"
+          done < diff_files.txt
+
+          gh pr comment ${{ github.event.pull_request.number }} --body "$COMMENT"
