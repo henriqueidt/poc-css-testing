@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Run Jest Visual Regression Tests
-        run: npm test-jest
+        run: npm run test-jest
 
       - name: Find Diff Images
         id: check_diff
