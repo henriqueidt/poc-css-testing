@@ -36,25 +36,34 @@ jobs:
             echo "DIFF_FOUND=false" >> $GITHUB_ENV
           fi
 
-      - name: Upload Diff Images
+      - name: Setup Git user
         if: env.DIFF_FOUND == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: visual-diff-images
-          path: |
-            src/components/**/__image_snapshots__/__diff_output__/*
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Comment on PR with Diff Images
+      - name: Push Diff Images to `visual-diffs` Branch
+        if: env.DIFF_FOUND == 'true'
+        run: |
+          git fetch origin visual-diffs || git checkout --orphan visual-diffs
+          git checkout visual-diffs || git checkout -b visual-diffs
+          mkdir -p visual-diffs
+          cp -r src/components/**/__image_snapshots__/__diff_output__/* visual-diffs/
+          git add visual-diffs
+          git commit -m "Update visual diff images"
+          git push origin visual-diffs --force
+
+      - name: Comment on PR with Diff Image Previews
         if: env.DIFF_FOUND == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           COMMENT="### ⚠️ Visual Regression Changes Detected!\n\n"
-          COMMENT+="Here are the detected differences:\n\n"
+          COMMENT+="📸 **Visual differences detected!** View them below:\n\n"
 
           while read -r line; do
             FILENAME=$(basename "$line")
-            COMMENT+="![${FILENAME}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${FILENAME})\n\n"
+            COMMENT+="![${FILENAME}](https://raw.githubusercontent.com/${{ github.repository }}/visual-diffs/main/visual-diffs/${FILENAME})\n\n"
           done < diff_files.txt
 
           gh pr comment ${{ github.event.pull_request.number }} --body "$COMMENT"
