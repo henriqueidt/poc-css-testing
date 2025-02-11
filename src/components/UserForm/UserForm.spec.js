@@ -20,9 +20,9 @@ test("can also test for component layout after its state has changed", async () 
   const user = userEvent.setup();
   render(<UserForm />);
 
-  await user.type(screen.getByLabelText("First Name:"), "John");
+  await user.type(screen.getByLabelText("First Name:"), "Jackson");
 
-  expect(screen.getByLabelText("First Name:")).toHaveValue("John");
+  expect(screen.getByLabelText("First Name:")).toHaveValue("Jackson");
 
   const screenshot = await generateImage();
   expect(screenshot).toMatchImageSnapshot();
