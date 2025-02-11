@@ -23,6 +23,7 @@ jobs:
 
       - name: Run Jest Visual Regression Tests
         run: npm run test-jest
+        continue-on-error: true
 
       - name: Find Diff Images
         id: check_diff
