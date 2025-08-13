@@ -9,7 +9,18 @@ The intent of this repository is to test and compare different approaches for te
 - Automation (how automated each strategy is, with less human interaction needed)
 - How accurate are the tests (less false positives / false negatives)
 
-### Cypress Image Snapshot
+## Chromatic
+
+- Needs storybook stories to work
+- Automatic tests against different browsers and devices
+- Figma integration
+- Team review and approval
+- `$$$`
+
+![Chromatic Diff](images/chromatic-changes.png)
+![Chromatic Review](images/chromatic-review.png)
+
+## Cypress
 
 - Original lib (https://github.com/jaredpalmer/cypress-image-snapshot) very outdated (last update was in 2021)
 - Fork from original lib being mantained (https://github.com/simonsmith/cypress-image-snapshot)
@@ -44,7 +55,7 @@ describe("<UserForm />", () => {
 
 ![User Form iPhone X Diff](cypress/snapshots/src/components/UserForm/UserForm.cy.js/__diff_output__/user-form-iphone-x.diff.png)
 
-### BackstopJS
+## BackstopJS
 
 - Support for multiple viewports in config file
 - URL centric
@@ -90,9 +101,32 @@ describe("<UserForm />", () => {
 
 ![iPhone  Diff](images/backstopJS-report.png)
 
-### JEST + jsdom-screenshot
+## JEST + jsdom-screenshot
 
 - Able to add screenshot verification among existing jest tests
 - Able to test different component states not only with different props, but after using userEvents to modify it!
+
+```javascript
+test("assertion for component default UI", async () => {
+  render(<UserForm />);
+
+  expect(screen.getByText("First Name:")).toBeInTheDocument();
+
+  const screenshot = await generateImage();
+  expect(screenshot).toMatchImageSnapshot();
+});
+
+test("can also test for component layout after its state has changed", async () => {
+  const user = userEvent.setup();
+  render(<UserForm />);
+
+  await user.type(screen.getByLabelText("First Name:"), "John");
+
+  expect(screen.getByLabelText("First Name:")).toHaveValue("John");
+
+  const screenshot = await generateImage();
+  expect(screenshot).toMatchImageSnapshot();
+});
+```
 
 ![Diff after userEvent](src/components/UserForm/__image_snapshots__/__diff_output__/user-form-spec-js-renders-component-and-matches-image-snapshot-1-snap-diff.png)

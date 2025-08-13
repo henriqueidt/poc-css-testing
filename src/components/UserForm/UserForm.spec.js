@@ -7,7 +7,6 @@ import UserForm from "./UserForm";
 jest.setTimeout(10000);
 
 test("assertion for component default UI", async () => {
-  const user = userEvent.setup();
   render(<UserForm />);
 
   expect(screen.getByText("First Name:")).toBeInTheDocument();
