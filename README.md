@@ -9,17 +9,6 @@ The intent of this repository is to test and compare different approaches for te
 - Automation (how automated each strategy is, with less human interaction needed)
 - How accurate are the tests (less false positives / false negatives)
 
-## Chromatic
-
-- Needs storybook stories to work
-- Automatic tests against different browsers and devices
-- Figma integration
-- Team review and approval
-- `$$$`
-
-![Chromatic Diff](images/chromatic-changes.png)
-![Chromatic Review](images/chromatic-review.png)
-
 ## Cypress
 
 - Original lib (https://github.com/jaredpalmer/cypress-image-snapshot) very outdated (last update was in 2021)
@@ -130,3 +119,22 @@ test("can also test for component layout after its state has changed", async () 
 ```
 
 ![Diff after userEvent](src/components/UserForm/__image_snapshots__/__diff_output__/user-form-spec-js-renders-component-and-matches-image-snapshot-1-snap-diff.png)
+
+## Chromatic
+
+- Needs storybook stories to work
+- Automatic tests against different browsers and devices
+- Figma integration
+- Team review and approval
+- `$$$`
+
+![Chromatic Diff](images/chromatic-changes.png)
+![Chromatic Review](images/chromatic-review.png)
+
+## Lost Pixel
+
+- Works with both storybook and pages
+- Easy to set up and use
+- Provides visual diffs for UI changes
+
+![Lost Pixel Diff](images/lost-pixel.png)
